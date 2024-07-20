@@ -57,6 +57,7 @@ app.post("/user/login", (req, res) => {
 		});
 });
 
+//endpoint dataset
 app.get("/dataset", (req, res) => {
     console.log("req", req.query)
     dataset
@@ -73,6 +74,25 @@ app.get("/dataset", (req, res) => {
     .catch(err => {
         return res.json(err);
     })
+});
+
+//endpoint datalist
+app.get("/datalist", (req, res) => {
+    console.log("req", req.query);
+    dataset
+    .find({
+        device_id: req.query.device_id,
+        index_id: req.query.index_id
+    })
+    .sort({ createdAt: -1 })
+    .limit(100)
+    .then((data) => {
+        console.log('data', data);
+        return res.json(data);
+    })
+    .catch(err => {
+        return res.json(err);
+    });
 });
 
 // Set up Socket.IO
