@@ -76,7 +76,7 @@ app.get("/dataset", (req, res) => {
     })
 });
 
-endpoint datalist
+// endpoint datalist
 app.get("/datalist", (req, res) => {
     console.log("req", req.query);
     dataset
@@ -85,7 +85,7 @@ app.get("/datalist", (req, res) => {
         index_id: req.query.index_id
     })
     .sort({ createdAt: -1 })
-    .limit(100)
+    .limit(1)
     .then((data) => {
         console.log('data', data);
         return res.json(data);
