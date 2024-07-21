@@ -76,48 +76,48 @@ app.get("/dataset", (req, res) => {
     })
 });
 
-//endpoint datalist
-// app.get("/datalist", (req, res) => {
-//     console.log("req", req.query);
-//     dataset
-//     .find({
-//         device_id: req.query.device_id,
-//         index_id: req.query.index_id
-//     })
-//     .sort({ createdAt: -1 })
-//     .limit(100)
-//     .then((data) => {
-//         console.log('data', data);
-//         return res.json(data);
-//     })
-//     .catch(err => {
-//         return res.json(err);
-//     });
-// });
+endpoint datalist
 app.get("/datalist", (req, res) => {
-    const { device_ids, index_ids } = req.query;
-
-    if (!device_ids || !index_ids) {
-        return res.status(400).json({ error: "device_ids and index_ids are required" });
-    }
-
-    const deviceIdArray = device_ids.split(',');
-    const indexIdArray = index_ids.split(',');
-
+    console.log("req", req.query);
     dataset
-        .find({
-            device_id: { $in: deviceIdArray },
-            index_id: { $in: indexIdArray },
-        })
-        .sort({ createdAt: -1 })
-        .limit(10)
-        .then((data) => {
-            return res.json(data);
-        })
-        .catch(err => {
-            return res.status(500).json(err);
-        });
+    .find({
+        device_id: req.query.device_id,
+        index_id: req.query.index_id
+    })
+    .sort({ createdAt: -1 })
+    .limit(100)
+    .then((data) => {
+        console.log('data', data);
+        return res.json(data);
+    })
+    .catch(err => {
+        return res.json(err);
+    });
 });
+// app.get("/datalist", (req, res) => {
+//     const { device_ids, index_ids } = req.query;
+
+//     if (!device_ids || !index_ids) {
+//         return res.status(400).json({ error: "device_ids and index_ids are required" });
+//     }
+
+//     const deviceIdArray = device_ids.split(',');
+//     const indexIdArray = index_ids.split(',');
+
+//     dataset
+//         .find({
+//             device_id: { $in: deviceIdArray },
+//             index_id: { $in: indexIdArray },
+//         })
+//         .sort({ createdAt: -1 })
+//         .limit(10)
+//         .then((data) => {
+//             return res.json(data);
+//         })
+//         .catch(err => {
+//             return res.status(500).json(err);
+//         });
+// });
 
 // Set up Socket.IO
 // io.on("connection", (socket) => {
