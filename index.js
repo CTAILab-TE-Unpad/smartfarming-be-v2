@@ -86,9 +86,9 @@ app.get("/datalist", (req, res) => {
     })
     .sort({ createdAt: -1 })
     .limit(1)
-    .then((data) => {
-        console.log('data', data);
-        return res.json(data);
+    .then((dataB) => {
+        console.log('dataB', dataB);
+        return res.json(dataB);
     })
     .catch(err => {
         return res.json(err);
