@@ -85,7 +85,7 @@ app.get("/datalist", (req, res) => {
         index_id: req.query.index_id
     })
     .sort({ createdAt: -1 })
-    .limit(1)
+    .limit(2)
     .then((data) => {
         console.log('data', data);
         return res.json(data);
