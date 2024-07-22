@@ -11,7 +11,7 @@ const app = express();
 const dataset =require('./model/dataset.js')
 
 mongoose
-	.connect(process.env.MONGO_URI, {
+	.connect(process.env."mongodb+srv://smartfarmingunpad:Zg2btY2zwNddpNsvLrYGNGtgTSZS6xxX@smartfarmingunpad.usves.mongodb.net/?retryWrites=true&w=majority", {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         dbName: "smartfarmingunpad",
