@@ -11,7 +11,7 @@ const app = express();
 const dataset =require('./model/dataset.js')
 
 mongoose
-	.connect(process.env."mongodb+srv://smartfarmingunpad:Zg2btY2zwNddpNsvLrYGNGtgTSZS6xxX@smartfarmingunpad.usves.mongodb.net/?retryWrites=true&w=majority", {
+	.connect("mongodb+srv://smartfarmingunpad:Zg2btY2zwNddpNsvLrYGNGtgTSZS6xxX@smartfarmingunpad.usves.mongodb.net/?retryWrites=true&w=majority", {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         dbName: "smartfarmingunpad",
@@ -48,7 +48,7 @@ app.post("/user/login", (req, res) => {
 		});
 });
 
-//endpoint dataset
+////endpoint dataset
 // app.get("/dataset", (req, res) => {
 //     console.log("req", req.query)
 //     dataset
@@ -67,8 +67,8 @@ app.post("/user/login", (req, res) => {
 //     })
 // });
 
-//endpoin dataset tapi dihubungin ke flask dulu
-app.get("/dataset", (req, res) => {
+//endpoin dataset tapi dihubungin ke ML dulu
+app.get("/datasetAnomali", (req, res) => {
     dataset
     .find({
         device_id: req.query.device_id,
@@ -103,8 +103,8 @@ app.get("/dataset", (req, res) => {
 });
 
 
-//endpoint dataset untuk NPK sendirian
-app.get("/datasetC", (req, res) => {
+//endpoint dataset untuk NPK sendirian nanti ke ML dulu
+app.get("/datasetNPK", (req, res) => {
     console.log("req", req.query)
     dataset
     .find({
@@ -122,7 +122,7 @@ app.get("/datasetC", (req, res) => {
     })
 });
 
-// endpoint datalist
+// endpoint datalist buat 10 data.
 app.get("/datalist", (req, res) => {
     console.log("req", req.query);
     dataset
