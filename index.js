@@ -9,6 +9,8 @@ mongoose.Promise = global.Promise;
 const app = express();
 
 const dataset =require('./model/dataset.js')
+const AnomalyDetection = require('./model/datasetAnomali.js')
+
 
 mongoose
 	.connect("mongodb+srv://smartfarmingunpad:Zg2btY2zwNddpNsvLrYGNGtgTSZS6xxX@smartfarmingunpad.usves.mongodb.net/?retryWrites=true&w=majority", {
@@ -67,41 +69,6 @@ app.post("/user/login", (req, res) => {
 //     })
 // });
 
-//endpoin dataset tapi dihubungin ke ML dulu
-// app.get("/datasetAnomali", (req, res) => {
-//     dataset
-//     .find({
-//         device_id: req.query.device_id,
-//         index_id: req.query.index_id
-//     })
-//     .sort({createdAt: -1})
-//     .limit(1)
-//     .then(async (data) => {
-//         if (data.length > 0) {
-//             const sensorData = {
-//                 sensor_name: req.query.sensor_name,
-//                 sensor_data: [{ value: data[0].value }]
-//             };
-
-//             try {
-//                 const anomalyResponse = await axios.post("https://smartfarming2-ml.vercel.app/detect_anomalies", sensorData);
-//                 const anomalies = anomalyResponse.data.anomalies;
-
-//                 data[0].anomaly = anomalies[0];
-//                 return res.json(data);
-//             } catch (error) {
-//                 console.error(error);
-//                 return res.status(500).json({ error: "Error in anomaly detection" });
-//             }
-//         } else {
-//             return res.json(data);
-//         }
-//     })
-//     .catch(err => {
-//         return res.json(err);
-//     });
-// });
-
 
 // endpoint datalist buat 10 data.
 app.get("/datalist", (req, res) => {
@@ -122,6 +89,7 @@ app.get("/datalist", (req, res) => {
     });
 });
 
+// endpoint 25 data ini awalnya tadinya buat dipake sementara chart aja...
 app.get("/dataBanyak", (req, res) => {
     console.log("req", req.query);
     dataset
@@ -139,6 +107,46 @@ app.get("/dataBanyak", (req, res) => {
         return res.json(err);
     });
 });
+
+//endpoint collection anomalydetections
+app.get("/anomalyDetection", (req, res) => {
+    console.log("req", req.query);
+    AnomalyDetection
+    .find({
+        sensor_name: req.query.sensor_name
+    })
+    .sort({ createdAt: -1 })
+    .limit(100)
+    .then((data) => {
+        console.log('data', data);
+        return res.json(data);
+    })
+    .catch(err => {
+	console.error('Query Error:', err);
+        return res.json(err);
+    });
+});
+
+
+// endpoint untuk post data anomali
+app.post("/anomalyDetection", (req, res) => {
+  const { sensor_name, anomaly } = req.body; //Menggunakan destructuring assignment
+
+  const newAnomaly = new AnomalyDetection({
+    sensor_name,
+    anomaly,
+    createdAt: new Date().toISOString()  // Set to current date/time
+  });
+
+  newAnomaly.save()
+    .then(result => {
+      res.status(201).json(result);
+    })
+    .catch(err => {
+      res.status(500).json({ error: err.message });
+    });
+});
+
 
 app.get("/", (req, res) => {
 	res.send({ message: "Halooo" });
