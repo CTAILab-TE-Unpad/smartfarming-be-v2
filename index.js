@@ -68,59 +68,40 @@ app.post("/user/login", (req, res) => {
 // });
 
 //endpoin dataset tapi dihubungin ke ML dulu
-app.get("/datasetAnomali", (req, res) => {
-    dataset
-    .find({
-        device_id: req.query.device_id,
-        index_id: req.query.index_id
-    })
-    .sort({createdAt: -1})
-    .limit(1)
-    .then(async (data) => {
-        if (data.length > 0) {
-            const sensorData = {
-                sensor_name: req.query.sensor_name,
-                sensor_data: [{ value: data[0].value }]
-            };
+// app.get("/datasetAnomali", (req, res) => {
+//     dataset
+//     .find({
+//         device_id: req.query.device_id,
+//         index_id: req.query.index_id
+//     })
+//     .sort({createdAt: -1})
+//     .limit(1)
+//     .then(async (data) => {
+//         if (data.length > 0) {
+//             const sensorData = {
+//                 sensor_name: req.query.sensor_name,
+//                 sensor_data: [{ value: data[0].value }]
+//             };
 
-            try {
-                const anomalyResponse = await axios.post("https://smartfarming2-ml.vercel.app/detect_anomalies", sensorData);
-                const anomalies = anomalyResponse.data.anomalies;
+//             try {
+//                 const anomalyResponse = await axios.post("https://smartfarming2-ml.vercel.app/detect_anomalies", sensorData);
+//                 const anomalies = anomalyResponse.data.anomalies;
 
-                data[0].anomaly = anomalies[0];
-                return res.json(data);
-            } catch (error) {
-                console.error(error);
-                return res.status(500).json({ error: "Error in anomaly detection" });
-            }
-        } else {
-            return res.json(data);
-        }
-    })
-    .catch(err => {
-        return res.json(err);
-    });
-});
+//                 data[0].anomaly = anomalies[0];
+//                 return res.json(data);
+//             } catch (error) {
+//                 console.error(error);
+//                 return res.status(500).json({ error: "Error in anomaly detection" });
+//             }
+//         } else {
+//             return res.json(data);
+//         }
+//     })
+//     .catch(err => {
+//         return res.json(err);
+//     });
+// });
 
-
-//endpoint dataset untuk NPK sendirian nanti ke ML dulu
-app.get("/datasetNPK", (req, res) => {
-    console.log("req", req.query)
-    dataset
-    .find({
-        device_id: req.query.device_id,
-        index_id: req.query.index_id
-    })
-    .sort({createdAt: -1})
-    .limit(1)
-    .then((data) => {
-        console.log('data', data)
-        return res.json(data);
-    })
-    .catch(err => {
-        return res.json(err);
-    })
-});
 
 // endpoint datalist buat 10 data.
 app.get("/datalist", (req, res) => {
@@ -132,6 +113,24 @@ app.get("/datalist", (req, res) => {
     })
     .sort({ createdAt: -1 })
     .limit(10)
+    .then((data) => {
+        console.log('data', data);
+        return res.json(data);
+    })
+    .catch(err => {
+        return res.json(err);
+    });
+});
+
+app.get("/dataBanyak", (req, res) => {
+    console.log("req", req.query);
+    dataset
+    .find({
+        device_id: req.query.device_id,
+        index_id: req.query.index_id
+    })
+    .sort({ createdAt: -1 })
+    .limit(25)
     .then((data) => {
         console.log('data', data);
         return res.json(data);
