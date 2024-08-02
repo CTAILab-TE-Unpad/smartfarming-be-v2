@@ -116,7 +116,7 @@ app.get("/anomalyDetection", (req, res) => {
         sensor_name: req.query.sensor_name
     })
     .sort({ createdAt: -1 })
-    .limit(100)
+    .limit(300)
     .then((data) => {
         console.log('data', data);
         return res.json(data);
